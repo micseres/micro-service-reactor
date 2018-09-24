@@ -1,0 +1,44 @@
+{
+    "name": "micseres/micro-service-reactor",
+    "description": "Micro Service Reactor",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "zogxray",
+            "email": "zogxray@gmail.com"
+        },
+        {
+            "name": "Andrii Yakovlev",
+            "email": "yawa20@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "ext-sockets": "*",
+        "ext-json": "*",
+        "micseres/micro-service-dh": "dev-master",
+        "micseres/micro-service-encrypt": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Micseres\\MicroServiceReactor\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Micseres\\MicroServiceReactor\\Tests\\": "Tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
