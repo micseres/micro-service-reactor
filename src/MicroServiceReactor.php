@@ -24,13 +24,15 @@ use Micseres\MicroServiceReactor\SystemRequest\Request;
  * Class MicroServiceReactor
  * @package Micseres\MicroServiceReactor
  */
-final class MicroServiceReactor
+final class MicroServiceReactor implements MicroServiceReactorInterface
 {
     const SLEEP_TIME = 1000;
+
     /**
      * @var string
      */
     private $ip;
+
     /**
      * @var string
      */
@@ -77,27 +79,27 @@ final class MicroServiceReactor
     /**
      * MicroServiceReactor constructor.
      *
-     * @param string $ip
-     * @param int $port
-     * @param string $route
-     * @param string $apiKey
+     * @param string      $ip
+     * @param int         $port
+     * @param string      $route
+     * @param string      $apiKey
      * @param null|string $algorithm
      *
      * @throws EncryptException
      */
     public function __construct(string $ip, int $port, string $route, string $apiKey, ?string $algorithm)
     {
-        $this->ip = $ip;
-        $this->port = $port;
-        $this->route = $route;
-        $this->apiKey = $apiKey;
+        $this->ip        = $ip;
+        $this->port      = $port;
+        $this->route     = $route;
+        $this->apiKey    = $apiKey;
         $this->algorithm = (empty($algorithm) || strtolower($algorithm) === "null") ? null : $algorithm;
 
         if (null === $this->algorithm) {
             $this->encrypt = new DummyEncrypt();
         } else {
             $this->encrypt = new OpenSSLEncrypt($algorithm);
-            $this->dh = new DiffieHellman(true);
+            $this->dh      = new DiffieHellman(true);
         }
 
         $this->setLoggerClosure([new Logger(), 'log']);
@@ -108,9 +110,8 @@ final class MicroServiceReactor
      * @throws ServiceException
      * @throws SocketException
      * @throws DiffieHellmanException
-     * @throws EncryptException
      */
-    public function process()
+    public function process(): void
     {
         if (null === $this->controllerClosure) {
             throw new CallbackException("You mast to set 'setController' function");
@@ -120,6 +121,22 @@ final class MicroServiceReactor
         $this->connect();
         $this->register();
         $this->listen();
+    }
+
+    /**
+     * @param \Closure[] $controllerClosure
+     */
+    public function setControllerClosure(array $controllerClosure): void
+    {
+        $this->controllerClosure = $controllerClosure;
+    }
+
+    /**
+     * @param \Closure[] $loggerClosure
+     */
+    public function setLoggerClosure(array $loggerClosure): void
+    {
+        $this->loggerClosure = $loggerClosure;
     }
 
     /**
@@ -134,7 +151,6 @@ final class MicroServiceReactor
         }
 
         $this->socket = $socket;
-
     }
 
     /**
@@ -152,7 +168,6 @@ final class MicroServiceReactor
     /**
      * @throws ServiceException
      * @throws DiffieHellmanException
-     * @throws EncryptException
      *
      * {"route":"passport","payload":{"clientId":"b050fa90-1ca1-11e8-ac3c-7e74fdd684e4"}}
      */
@@ -197,7 +212,6 @@ final class MicroServiceReactor
 
     /**
      * @throws SocketException
-     * @throws EncryptException
      */
     private function listen(): void
     {
@@ -208,7 +222,7 @@ final class MicroServiceReactor
                 throw new SocketException('Can`t read data from socket');
             }
 
-            $result =  trim($result);
+            $result = trim($result);
 
             if (!empty($result)) {
                 ($this->loggerClosure)("Service receive data {$result}", ['route' => $this->route], 0);
@@ -230,23 +244,8 @@ final class MicroServiceReactor
     }
 
     /**
-     * @param \Closure[] $controllerClosure
-     */
-    public function setControllerClosure(array $controllerClosure): void
-    {
-        $this->controllerClosure = $controllerClosure;
-    }
-
-    /**
-     * @param \Closure[] $loggerClosure
-     */
-    public function setLoggerClosure(array $loggerClosure): void
-    {
-        $this->loggerClosure = $loggerClosure;
-    }
-
-    /**
      * @param string $buffer
+     *
      * @return string
      */
     private function prepareBuffer(string $buffer): string
