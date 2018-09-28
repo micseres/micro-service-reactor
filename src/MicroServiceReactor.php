@@ -208,10 +208,10 @@ final class MicroServiceReactor
                 throw new SocketException('Can`t read data from socket');
             }
 
-            ($this->loggerClosure)("Service receive data {$result}", ['route' => $this->route], 0);
             $result =  trim($result);
 
             if (!empty($result)) {
+                ($this->loggerClosure)("Service receive data {$result}", ['route' => $this->route], 0);
                 $processedData = ($this->controllerClosure)($result);
 
                 $request = new Request($this->route);
