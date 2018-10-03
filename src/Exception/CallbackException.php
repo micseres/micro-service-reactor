@@ -12,7 +12,7 @@ namespace Micseres\MicroServiceReactor\Exception;
  * Class CallbackException
  * @package Micseres\MicroServiceReactor\Exception
  */
-class CallbackException extends \Exception
+class CallbackException extends MicseresException
 {
 
 }

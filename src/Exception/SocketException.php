@@ -12,7 +12,7 @@ namespace Micseres\MicroServiceReactor\Exception;
  * Class SocketException
  * @package Micseres\MicroServiceReactor\Exception
  */
-class SocketException extends \Exception
+class SocketException extends MicseresException
 {
 
 }
