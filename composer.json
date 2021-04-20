@@ -3,7 +3,7 @@
     "description": "Micro Service Reactor",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "authors": [
         {
             "name": "zogxray",
@@ -15,14 +15,14 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": ">=7.2",
         "ext-sockets": "*",
         "ext-json": "*",
         "micseres/micro-service-dh": "dev-master",
         "micseres/micro-service-encrypt": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.2"
+        "phpunit/phpunit": ">=7.2"
     },
     "autoload": {
         "psr-4": {
